@@ -13,37 +13,37 @@ def load_data(filename):
 df = load_data("transactions.csv")
 df = pd.DataFrame(df)
 
-from collections import Counter     #count the items in an iterable list,Counter holds the data in an unordered collection
+from collections import Counter     #count the itemset in an iterable list,Counter holds the data in an unordered collection
 from itertools import combinations        
 Candidate_set = []
 Frequent_set = []
-items = pd.unique(df.values.ravel())   #unique values in column
-items = items[~pd.isnull(items)]       #consider only not null itemset
+itemset = pd.unique(df.values.ravel())   #unique values in column
+itemset = itemset[~pd.isnull(itemset)]       #consider only not null itemset
 min_support = 0.6
-flag=0
+fl=0
 no_of_transactions = df[df.columns[0]].count()
 
-for iterno in range(1,len(items)+1): #Max iterations is equal to the items in the dataset
+for it in range(1,len(itemset)+1): #Max iterations is equal to the itemset in the dataset
     Count = {}     
     intermediate = []   
-    print("C"+str(iterno)+":")
-    if iterno==1:
-        Candidate_set.append(items)
-        for txn in Candidate_set[iterno-1]:
-            ctr=0
+    print("C"+str(it)+":")
+    if it==1:
+        Candidate_set.append(itemset)
+        for txn in Candidate_set[it-1]:
+            cntr=0
             for val in df.values:
                 if txn in val:
-                    ctr+=1
-            Count[txn] = ctr/no_of_transactions
+                    cntr+=1
+            Count[txn] = cntr/no_of_transactions
     else:
       if Frequent_set!=[]:
-        Candidate_set.append(list(combinations(np.unique(np.array(Frequent_set[iterno-2]).ravel()),iterno)))
-        for txn in Candidate_set[iterno-1]:
-            ctr = 0
+        Candidate_set.append(list(combinations(np.unique(np.array(Frequent_set[it-2]).ravel()),it)))
+        for txn in Candidate_set[it-1]:
+            cntr = 0
             for val in df.values:
                 if all(i in val for i in txn):
-                    ctr+=1
-            Count[txn] = ctr/no_of_transactions
+                    cntr+=1
+            Count[txn] = cntr/no_of_transactions
             
     for k in Count.keys():
         if Count[k] >= min_support:
@@ -52,7 +52,7 @@ for iterno in range(1,len(items)+1): #Max iterations is equal to the items in th
     print(Count)
     print()
    
-    print("L"+str(iterno)+":")
+    print("L"+str(it)+":")
     for key,value in Count.items():
       if(value>=min_support):
         print(key,':',value)
@@ -62,15 +62,15 @@ for iterno in range(1,len(items)+1): #Max iterations is equal to the items in th
         print('Final Frequent Set')
         if Frequent_set !=[]:
             print(Frequent_set[-1])
-            flag=1
+            fl=1
             break
         else:
             print("no such frequent set")
-            flag=1
+            fl=1
             break
     Frequent_set.append(intermediate)
 
-if flag==0:
+if fl==0:
   if Frequent_set !=[]:
     print('Final Frequent Set:')
     print(Frequent_set[-1])
